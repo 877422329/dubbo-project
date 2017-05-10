@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:application name="dubbo-consumer"/>
+
+    <!--注册中心-->
+    <dubbo:registry address="zookeeper://192.168.237.133:2181?backup=192.168.237.134:2181,192.168.237.135:2181"
+                    check="false" subscribe="true" register="true" id="registry"></dubbo:registry>
+
+    <dubbo:protocol name="dubbo" port="20890"/>
+
+    <dubbo:provider protocol="dubbo" registry="registry"/>
+
+    <dubbo:reference interface="com.ideal.service.UserService" id="userService" check="false"></dubbo:reference>
+
+    <bean id="dependencyService" class="com.ideal.service.impl.DependencyServiceImpl">
+    </bean>
+
+    <dubbo:service interface="com.ideal.service.DependencyService" ref="dependencyService"/>
+
+</beans>
